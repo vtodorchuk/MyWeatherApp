@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(LocationViewModel.self) var locationViewModel
+    @Environment(ForecastViewModel.self) var forecastViewModel
+    @EnvironmentObject var mainRouter: MainRouter
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -21,4 +25,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(LocationViewModel())
+        .environment(ForecastViewModel())
+        .environmentObject(MainRouter())
 }

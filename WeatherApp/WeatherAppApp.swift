@@ -9,9 +9,33 @@ import SwiftUI
 
 @main
 struct WeatherAppApp: App {
+    @State private var locationViewModel = LocationViewModel()
+    @State private var forecastViewModel = ForecastViewModel()
+    @StateObject private var router = MainRouter()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
+                .onAppear {
+                    locationViewModel.checkIfLocationServicesIsEnabled()
+                }
+                .alert(locationViewModel.locationAuthorizationStatus?.title()  ?? "", isPresented: $locationViewModel.isAlertShown) {
+                    Button("Ok", role: .cancel) {}
+                    Button {
+                        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(settingsUrl)
+                        }
+                        locationViewModel.locationAuthorizationStatus = nil
+                        locationViewModel.isAlertShown = false
+                    } label: {
+                        Text("Open Settings")
+                    }
+                } message: {
+                    Text(locationViewModel.locationAuthorizationStatus?.message() ?? "")
+                }
         }
+        .environment(locationViewModel)
+        .environment(forecastViewModel)
+        .environmentObject(router)
     }
 }
