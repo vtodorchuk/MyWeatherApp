@@ -12,12 +12,25 @@ struct MainView: View {
     
     var body: some View {
         NavigationStack(path: $mainRouter.path) {
-            SearchCityView()
+            VStack {
+                CitiesView()
+            }
+            .navigationDestination(for: MainDestination.self) { destination in
+                Group {
+                    switch destination {
+                    case .cities: CitiesView()
+                    case .forecast(let city): ForecastView(city: city)
+                    case .search: SearchCityView()
+                    }
+                }
+            }
         }
     }
 }
 
 #Preview {
     MainView()
+        .environment(LocationViewModel())
+        .environment(ForecastViewModel(networkmanager: WeatherNetworkManager()))
         .environmentObject(MainRouter())
 }

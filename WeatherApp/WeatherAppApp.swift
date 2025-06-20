@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct WeatherAppApp: App {
     @State private var locationViewModel = LocationViewModel()
-    @State private var forecastViewModel = ForecastViewModel()
+    @State private var forecastViewModel = ForecastViewModel(networkmanager: WeatherNetworkManager())
     @StateObject private var router = MainRouter()
     
     var body: some Scene {

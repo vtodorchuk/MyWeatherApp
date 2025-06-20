@@ -17,29 +17,32 @@ struct SearchCityView: View {
     
     var body: some View {
         VStack {
-            header().padding(.horizontal)
-            if let city = locationViewModel.currentCity {
-                Button {
-                    mainRouter.navigate(to: .forecast(city: city))
-                } label: {
-                    homeSuggestion(city: city).padding()
-                }
-            }
+            header()
+            search()
             
             ScrollView {
                 LazyVStack {
+                    if let city = locationViewModel.currentCity {
+                        Button {
+                            processSearchResult(city: city)
+                        } label: {
+                            homeSuggestion(city: city).padding()
+                        }
+                    }
+                    
                     ForEach(searchViewModel.searchResults) { city in
                         Button {
-                            mainRouter.navigate(to: .forecast(city: city))
+                            processSearchResult(city: city)
                         } label: {
                             citiDetails(city: city)
                         }
                     }
                 }
-                .padding(.horizontal)
             }
         }
-        .navigationTitle("Search")
+        .padding()
+        .navigationBarBackButtonHidden(true)
+        .background(CustomBackground())
     }
     
     @ViewBuilder
@@ -66,7 +69,7 @@ struct SearchCityView: View {
     }
     
     @ViewBuilder
-    func header() -> some View {
+    func search() -> some View {
         HStack {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(.thinMaterial)
@@ -98,6 +101,24 @@ struct SearchCityView: View {
     }
     
     @ViewBuilder
+    func header() -> some View {
+        HStack {
+            Button {
+                mainRouter.popBack(count: 1)
+            } label: {
+                Image(systemName: "chevron.backward")
+                    .foregroundStyle(.black)
+            }
+            .opacity(mainRouter.isPreviousDestination() ? 1 : 0)
+            .disabled(!mainRouter.isPreviousDestination())
+            Spacer()
+            Text("Search")
+                .font(.headline)
+                .fontWeight(.semibold)
+        }
+    }
+    
+    @ViewBuilder
     func citiDetails(city: City) -> some View {
         VStack(alignment: .leading) {
             HStack {
@@ -113,13 +134,18 @@ struct SearchCityView: View {
         }
         .foregroundStyle(.black)
     }
+    
+    func processSearchResult(city: City) {
+//        forecastViewModel.selectedCity = city
+        mainRouter.navigate(to: .forecast(city: city))
+    }
 }
 
 #Preview {
     NavigationStack {
         SearchCityView()
             .environment(LocationViewModel())
-            .environment(ForecastViewModel())
+            .environment(ForecastViewModel(networkmanager: WeatherNetworkManager()))
             .environmentObject(MainRouter())
     }
 }

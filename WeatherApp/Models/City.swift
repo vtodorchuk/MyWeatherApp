@@ -10,10 +10,10 @@ import CoreLocation
 
 struct City: Hashable, Equatable, Identifiable {
     var id = UUID()
-    
     var name: String
     var state: String = ""
-    
+    var pinned: Bool = false
     var lon: CLLocationDegrees
     var lat: CLLocationDegrees
+    var forecast: ForecastResponse?
 }

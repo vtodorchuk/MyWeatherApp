@@ -11,6 +11,8 @@ import Observation
 
 @Observable
 class LocationViewModel: NSObject, CLLocationManagerDelegate {
+    var pinnedCities: [City] = []
+    
     var currentUserLocation: CLLocationCoordinate2D?
     var currentCity: City?
     
@@ -32,6 +34,14 @@ class LocationViewModel: NSObject, CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthorizationStatus()
+    }
+    
+    func pinnedCity(city: City) {
+        if let index = pinnedCities.firstIndex(where: { $0.id == city.id }) {
+            pinnedCities.remove(at: index)
+        } else {
+            pinnedCities.append(city)
+        }
     }
     
     private func checkLocationAuthorizationStatus() {
@@ -66,8 +76,8 @@ class LocationViewModel: NSObject, CLLocationManagerDelegate {
             }
             
             if let placemark = placemarks?.first {
-                if let locality = placemark.locality {
-                    self.currentCity = City(name: locality, lon: location.coordinate.longitude, lat: location.coordinate.latitude)
+                if let locality = placemark.locality, let state = placemark.country {
+                    self.currentCity = City(name: locality, state: state, lon: location.coordinate.longitude, lat: location.coordinate.latitude)
                     print("Detected city: \(locality)")
                 }
                 

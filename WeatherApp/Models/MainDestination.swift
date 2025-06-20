@@ -10,5 +10,5 @@ import Foundation
 enum MainDestination: Hashable {
     case cities
     case forecast(city: City)
-    case fullForeCast(city: City)
+    case search
 }
