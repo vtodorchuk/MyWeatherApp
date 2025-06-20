@@ -45,16 +45,16 @@ struct ForecastView: View {
                     Group {
                         Text(city.name.capitalized)
                             .font(.headline)
-                        Text(forecastViewModel.forecast?.currentTemp ?? "")
+                        Text(city.forecast?.currentTemp ?? "")
                             .font(.largeTitle)
                     }
                     .fontDesign(.rounded)
                     
-                    Text(forecastViewModel.forecast?.weatherDescription ?? "")
+                    Text(city.forecast?.weatherDescription ?? "")
                     
                     HStack(alignment: .bottom, spacing: 20) {
-                        Text(forecastViewModel.forecast?.tempMax ?? "")
-                        Text(forecastViewModel.forecast?.tempMin ?? "")
+                        Text(city.forecast?.tempMax ?? "")
+                        Text(city.forecast?.tempMin ?? "")
                     }
                 }
                 .padding(.top, 25)
@@ -94,8 +94,8 @@ struct ForecastView: View {
                         .scrollIndicators(.hidden)
                     }
                     
-                    if let _ = forecastViewModel.detailedForecast {
-                        DetailedForecastView()
+                    if let detailedForecast = city.detailedForecast {
+                        DetailedForecastView(detailedForecast: detailedForecast)
                             .padding(.vertical)
                     } else {
                         ScrollView {}
@@ -105,10 +105,26 @@ struct ForecastView: View {
             .padding()
             .navigationBarBackButtonHidden(true)
             .onAppear {
-                forecastViewModel.getCityForecast(lat: city.lat, lon: city.lon)
-                forecastViewModel.getDetailedForecast(lat: city.lat, lon: city.lon)
-                
-                city.forecast = forecastViewModel.forecast
+                Task {
+                    await fetchDetaildForecast()
+                    await fecthCityForecast()
+                }
+            }
+        }
+    }
+    
+    func fetchDetaildForecast() async {
+        await forecastViewModel.getDetailedForecast(lat: city.lat, lon: city.lon) { detaildForecast in
+            if let detaildForecast = detaildForecast {
+                city.detailedForecast = detaildForecast
+            }
+        }
+    }
+    
+    func fecthCityForecast() async {
+        await forecastViewModel.getCityForecast(lat: city.lat, lon: city.lon) { forecast in
+            if let forecast = forecast {
+                city.forecast = forecast
             }
         }
     }
@@ -125,7 +141,7 @@ struct ForecastView: View {
             .opacity(mainRouter.isPreviousDestination() ? 1 : 0)
             .disabled(!mainRouter.isPreviousDestination())
             Spacer()
-            Text(forecastViewModel.forecast?.dateTime() ?? .now, format: .dateTime.hour().minute())
+            Text(city.forecast?.dateTime() ?? .now, format: .dateTime.hour().minute())
             Spacer()
             Button {
                 city.pinned.toggle()

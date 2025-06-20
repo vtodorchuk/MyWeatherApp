@@ -12,32 +12,27 @@ import CoreLocation
 class ForecastViewModel {
     var networkmanager: NetworkManager
     
-    var forecast: ForecastResponse?
-    var detailedForecast: DetailedForecastResponse?
-    
     init(networkmanager: NetworkManager) {
         self.networkmanager = networkmanager
     }
     
-    func getCityForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) {
-        networkmanager.fetchCityForecast(lat: lat, lon: lon) { forecast  in
-            DispatchQueue.main.async {
-                if let forecast = forecast {
-                    self.forecast = forecast
-                    print("Weather for City API CALL:\(forecast)\n\n")
-                }
-            }
+    func getCityForecast(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (ForecastResponse?) -> Void) async {
+        do {
+            let result = try await networkmanager.fetchCityForecast(lat: lat, lon: lon)
+            completion(result)
+        } catch {
+            print("Error fetching city forecast:", error.localizedDescription)
+            completion(nil)
         }
     }
     
-    func getDetailedForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) {
-        networkmanager.fetchDetailedForecast(lat: lat, lon: lon, cnt: 16) { forecast in
-            DispatchQueue.main.async {
-                if let forecast = forecast {
-                    self.detailedForecast = forecast
-                    print("Weather for Details API CALL:\(forecast)\n\n")
-                }
-            }
+    func getDetailedForecast(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (DetailedForecastResponse?) -> Void) async {
+        do {
+            let result = try await networkmanager.fetchDetailedForecast(lat: lat, lon: lon, cnt: 16)
+            completion(result)
+        } catch {
+            print("Error fetching detailed forecast:", error.localizedDescription)
+            completion(nil)
         }
     }
 }

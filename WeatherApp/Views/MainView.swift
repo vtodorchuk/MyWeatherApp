@@ -16,12 +16,10 @@ struct MainView: View {
                 CitiesView()
             }
             .navigationDestination(for: MainDestination.self) { destination in
-                Group {
-                    switch destination {
-                    case .cities: CitiesView()
-                    case .forecast(let city): ForecastView(city: city)
-                    case .search: SearchCityView()
-                    }
+                switch destination {
+                case .cities: CitiesView()
+                case .forecast(let city): ForecastView(city: city)
+                case .search: SearchCityView()
                 }
             }
         }

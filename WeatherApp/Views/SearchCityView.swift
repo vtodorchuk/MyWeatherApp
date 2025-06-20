@@ -39,6 +39,7 @@ struct SearchCityView: View {
                     }
                 }
             }
+            .padding(.vertical)
         }
         .padding()
         .navigationBarBackButtonHidden(true)
@@ -72,7 +73,7 @@ struct SearchCityView: View {
     func search() -> some View {
         HStack {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(.thinMaterial)
+                .fill(.white)
                 .frame(height: 30)
                 .overlay {
                     HStack {
@@ -121,11 +122,9 @@ struct SearchCityView: View {
     @ViewBuilder
     func citiDetails(city: City) -> some View {
         VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "globe.europe.africa")
-                    .fontWeight(.semibold)
-                Text("\(city.name.capitalized),")
-                Text(city.state.capitalized)
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(city.name.capitalized),").font(.title)
+                Text(city.state.capitalized).font(.callout)
                 Spacer()
                 Image(systemName: "chevron.right").foregroundStyle(.black)
             }
@@ -136,7 +135,6 @@ struct SearchCityView: View {
     }
     
     func processSearchResult(city: City) {
-//        forecastViewModel.selectedCity = city
         mainRouter.navigate(to: .forecast(city: city))
     }
 }

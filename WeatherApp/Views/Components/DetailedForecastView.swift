@@ -10,6 +10,8 @@ import SwiftUI
 struct DetailedForecastView: View {
     @Environment(ForecastViewModel.self) var forecastViewModel
     
+    var detailedForecast: DetailedForecastResponse
+    
     var body: some View {
         VStack(alignment: .center) {
             HStack {
@@ -20,10 +22,10 @@ struct DetailedForecastView: View {
             
             Divider()
             
-            if let list = forecastViewModel.detailedForecast?.list {
+            if !detailedForecast.list.isEmpty {
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(list, id: \.self) { day in
+                        ForEach(detailedForecast.list, id: \.self) { day in
                             VStack(spacing: 35) {
                                 Text(day.dateTime(), format: .dateTime.weekday())
                                 WeatherIcons.init(rawValue: day.icon)?.toSymbol()
@@ -55,13 +57,5 @@ struct DetailedForecastView: View {
                 .scrollIndicators(.hidden)
             }
         }
-    }
-}
-
-#Preview {
-    ScrollView {
-        DetailedForecastView()
-            .environment(ForecastViewModel(networkmanager: WeatherNetworkManager()))
-            .padding()
     }
 }

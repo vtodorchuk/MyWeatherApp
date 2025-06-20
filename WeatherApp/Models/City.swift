@@ -15,5 +15,7 @@ struct City: Hashable, Equatable, Identifiable {
     var pinned: Bool = false
     var lon: CLLocationDegrees
     var lat: CLLocationDegrees
+    
     var forecast: ForecastResponse?
+    var detailedForecast: DetailedForecastResponse?
 }
