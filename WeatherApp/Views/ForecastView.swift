@@ -50,11 +50,11 @@ struct ForecastView: View {
                     }
                     .fontDesign(.rounded)
                     
-                    Text(city.forecast?.weatherDescription ?? "")
+                    Text(city.forecast?.weatherDescription ?? "- -")
                     
                     HStack(alignment: .bottom, spacing: 20) {
-                        Text(city.forecast?.tempMax ?? "")
-                        Text(city.forecast?.tempMin ?? "")
+                        Text(city.forecast?.tempMax ?? "- -")
+                        Text(city.forecast?.tempMin ?? "- -")
                     }
                 }
                 .padding(.top, 25)

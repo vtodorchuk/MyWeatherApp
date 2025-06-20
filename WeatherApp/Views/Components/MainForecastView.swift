@@ -28,17 +28,17 @@ struct MainForecastView: View {
                     HStack {
                         Text("Feels Like:").fontWeight(.bold)
                         Spacer()
-                        Text(city.forecast?.feelsLike ?? "")
+                        Text(city.forecast?.feelsLike ?? "- -")
                     }
                     HStack {
                         Text("Pressure:").fontWeight(.bold)
                         Spacer()
-                        Text(city.forecast?.pressure ?? "")
+                        Text(city.forecast?.pressure ?? "- -")
                     }
                     HStack {
                         Text("See level:").fontWeight(.bold)
                         Spacer()
-                        Text(city.forecast?.seeLevel ?? "")
+                        Text(city.forecast?.seeLevel ?? "- -")
                     }
                 }
                 .padding()
