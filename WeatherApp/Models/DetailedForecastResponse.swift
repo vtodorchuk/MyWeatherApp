@@ -35,7 +35,7 @@ struct ForecastDay: Codable, Hashable {
     let sunrise: Int
     let sunset: Int
     let temp: Temperature
-    let feels_like: FeelsLike
+    let feelsLike: FeelsLike
     let pressure: Int
     let humidity: Int
     let weather: [Weather]
@@ -43,7 +43,25 @@ struct ForecastDay: Codable, Hashable {
     let deg: Int
     let gust: Double?
     let clouds: Int
-    let pop: Double?
+    let pop: Double
+    let rain: Double?
+    
+    enum CodingKeys: String, CodingKey, Hashable {
+        case dt
+        case sunrise
+        case sunset
+        case temp
+        case feelsLike = "feels_like"
+        case pressure
+        case humidity
+        case weather
+        case speed
+        case deg
+        case gust
+        case clouds
+        case pop
+        case rain
+    }
 }
 
 struct Temperature: Codable, Hashable {
