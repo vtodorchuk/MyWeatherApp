@@ -59,48 +59,50 @@ struct ForecastView: View {
                 }
                 .padding(.top, 25)
                 .padding(.bottom, 25)
-                
-                VStack(alignment: .center, spacing: 30) {
-                    VStack {
-                        HStack {
-                            Label("General", systemImage: "list.bullet.clipboard")
-                                .font(.footnote)
-                            Spacer()
-                        }
-                        
-                        Divider()
-                        
-                        ScrollView(.horizontal) {
+                ScrollView {
+                    VStack(alignment: .center, spacing: 30) {
+                        VStack {
                             HStack {
-                                MainForecastView(city: city)
-                                    .frame(width: 200, height: 120)
-                                
-                                if let rain = city.forecast?.rain {
-                                    RainView(rain: rain)
+                                Label("General", systemImage: "list.bullet.clipboard")
+                                    .font(.footnote)
+                                Spacer()
+                            }
+                            
+                            Divider()
+                            
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    MainForecastView(city: city)
                                         .frame(width: 200, height: 120)
-                                }
-                                
-                                if let clouds = city.forecast?.clouds {
-                                    CloudsView(clouds: clouds)
-                                        .frame(width: 200, height: 120)
-                                }
-                                
-                                if let wind = city.forecast?.wind {
-                                    WindView(wind: wind)
-                                        .frame(width: 200, height: 120)
+                                    
+                                    if let rain = city.forecast?.rain {
+                                        RainView(rain: rain)
+                                            .frame(width: 200, height: 120)
+                                    }
+                                    
+                                    if let clouds = city.forecast?.clouds {
+                                        CloudsView(clouds: clouds)
+                                            .frame(width: 200, height: 120)
+                                    }
+                                    
+                                    if let wind = city.forecast?.wind {
+                                        WindView(wind: wind)
+                                            .frame(width: 200, height: 120)
+                                    }
                                 }
                             }
+                            .scrollIndicators(.hidden)
                         }
-                        .scrollIndicators(.hidden)
-                    }
-                    
-                    if let detailedForecast = city.detailedForecast {
-                        DetailedForecastView(detailedForecast: detailedForecast)
-                            .padding(.vertical)
-                    } else {
-                        ScrollView {}
+                        
+                        if let detailedForecast = city.detailedForecast {
+                            DetailedForecastView(detailedForecast: detailedForecast)
+                                .padding(.vertical)
+                        } else {
+                            ScrollView {}
+                        }
                     }
                 }
+                .scrollIndicators(.never)
             }
             .padding()
             .navigationBarBackButtonHidden(true)
