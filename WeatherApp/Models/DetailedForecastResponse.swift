@@ -30,14 +30,12 @@ struct Coordinate: Codable, Hashable {
     let lat: Double
 }
 
-struct ForecastDay: Codable, Hashable, Identifiable {
-    var id: Int { dt }
-
+struct ForecastDay: Codable, Hashable {
     let dt: Int
     let sunrise: Int
     let sunset: Int
     let temp: Temperature
-    let feelsLike: FeelsLike
+    let feels_like: FeelsLike
     let pressure: Int
     let humidity: Int
     let weather: [Weather]
@@ -45,8 +43,7 @@ struct ForecastDay: Codable, Hashable, Identifiable {
     let deg: Int
     let gust: Double?
     let clouds: Int
-    let pop: Double
-    let rain: Double?
+    let pop: Double?
 }
 
 struct Temperature: Codable, Hashable {
